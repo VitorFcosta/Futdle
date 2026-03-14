@@ -47,16 +47,33 @@ Siga os passos abaixo para clonar e testar a aplicação na sua máquina:
 * Ter um emulador configurado (Android/iOS) ou um dispositivo físico conectado.
 
 **2. Clonando o repositório:**
-git clone [https://github.com/VitorFcosta/futdle.git](https://github.com/VitorFcosta/futdle.git)
+```bash
+git clone https://github.com/VitorFcosta/futdle.git
 cd futdle
+```
 
-3. Instalando as dependências: "flutter pub get"
-4. Rodando o aplicativo: "flutter run"
-📱 Prints da Aplicação
-Tela de Login
-Tela Inicial
-Tela de Jogo (Gameplay)
-📥 Download e TesteBaixar APK (Android): Clique aqui para baixar a versão mais recente Testar Versão Web: Acessar FutDle Web
+**3. Crie a chave da API**
+- Este projeto consome dados da [API-Sports (Football)](https://www.api-football.com/).
+- Crie uma conta lá para pegar sua `API_KEY`.
 
-1. **Os Links das Imagens:** 
-2. **O Link do APK:** 
+**4. Configure as variáveis de ambiente**
+- Na raiz do projeto, você verá um arquivo chamado `.env.example`.
+- Crie um arquivo novo chamado `.env` no mesmo local.
+- Copie o conteúdo do `.env.example` para dentro do seu novo `.env` e substitua `sua_chave_da_api_sports_aqui` pela chave real que você pegou no site.
+
+**5. Instalando dependências e Rodando:**
+```bash
+flutter pub get
+flutter run
+```
+
+---
+
+## 📱 Prints da Aplicação
+- Tela de Login
+- Tela Inicial
+- Tela de Jogo (Gameplay)
+
+## 📥 Download e Teste
+- Baixar APK (Android): Clique aqui para baixar a versão mais recente
+- Testar Versão Web: Acessar FutDle Web

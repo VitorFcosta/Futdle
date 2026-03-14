@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "4835423999",
+    "project_id": "futdle-vitor",
+    "storage_bucket": "futdle-vitor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4835423999:android:d68376f95eec53de6cfeca",
+        "android_client_info": {
+          "package_name": "com.example.futdle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4n3D1O5cfBYstIg-5fsCXxlAP0Mn2xjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
