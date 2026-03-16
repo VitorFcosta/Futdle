@@ -1,72 +1,69 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'api_service.dart';
-import 'models/player_model.dart'; 
+import 'core/api/api_service.dart';
+import 'core/api/api_constants.dart';
+import 'core/firebase/firestore_service.dart';
+import 'core/exceptions/app_exceptions.dart';
+import 'core/logger/app_logger.dart';
 
+/// Gerenciador principal dos jogos.
+/// Orquestra a lógica de negócio (sortear jogador) usando
+/// [ApiService] para buscar dados e [FirestoreService] para persistir.
 class GameManager {
   final ApiService _apiService;
-  final FirebaseFirestore _db;
+  final FirestoreService _firestoreService;
 
-  GameManager({ApiService? apiService, FirebaseFirestore? db})
-      : _apiService = apiService ?? ApiService(),
-        _db = db ?? FirebaseFirestore.instance;
+  GameManager({
+    ApiService? apiService,
+    FirestoreService? firestoreService,
+  })  : _apiService = apiService ?? ApiService(),
+        _firestoreService = firestoreService ?? FirestoreService();
 
+  /// Sorteia um jogador aleatório das top ligas e salva no Firestore.
+  /// Tenta até [maxAttempts] vezes caso o jogador não tenha estatísticas.
   Future<void> randomPlayer() async {
-    List<int> topLeagues = [39, 140, 135, 78, 61];
     final random = Random();
+    const int maxAttempts = 5;
 
-    bool playerFound = false;
-    int maxAttempts = 5; 
-    int attempts = 0;
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      final leagueId = ApiConstants.topLeagues[
+          random.nextInt(ApiConstants.topLeagues.length)];
+      final randomPage = random.nextInt(3) + 1;
 
-    while (!playerFound && attempts < maxAttempts) {
-      attempts++;
-      int leagueId = topLeagues[random.nextInt(topLeagues.length)];
-      int randomPage = random.nextInt(3) + 1;
-      
-      print('sorteio definido. -> Liga: $leagueId, Pagina: $randomPage (Tentativa $attempts)');
+      AppLogger.info(
+        'Sorteio definido -> Liga: $leagueId, Página: $randomPage '
+        '(Tentativa $attempt)',
+      );
 
       try {
-        List<PlayerModel> players = await _apiService.updateDailyPlayer(leagueId, randomPage);
-        
-        if (players.isEmpty) {
-          continue;
-        }
+        final players = await _apiService.fetchPlayers(leagueId, randomPage);
 
-        int randomIndex = random.nextInt(players.length);
-        final player = players[randomIndex];
+        if (players.isEmpty) continue;
+
+        final player = players[random.nextInt(players.length)];
 
         if (player.statistics == null) {
-          print('Jogador ${player.name} veio sem statistics. Sorteando novamente...');
+          AppLogger.warning(
+            'Jogador ${player.name} sem statistics. Tentando novamente...',
+          );
           continue;
         }
 
-        final stats = player.statistics!;
-
-        await _db.collection('daily_player').doc('today').set({
-            'name': player.name,
-            'age': player.age,
-            'nationality': player.nationality,
-            'team': stats.teamName,
-            'league': stats.leagueName,
-            'position': stats.position,
-            'photo': player.photo,
-            'updatedAt': FieldValue.serverTimestamp(),
-          }
-        );
-        print('jogador sorteado com sucesso "${player.name}"');
-        playerFound = true; 
-
+        await _firestoreService.saveDailyPlayer(player);
+        AppLogger.info('Jogador sorteado com sucesso: "${player.name}"');
+        return;
       } catch (e) {
-        print('Erro na tentativa $attempts: $e');
-        if (attempts >= maxAttempts) {
-           throw 'Não foi possível sortear um jogador. Tente novamente mais tarde.';
+        AppLogger.error('Erro na tentativa $attempt', e);
+
+        if (attempt >= maxAttempts) {
+          throw const PlayerNotFoundException(
+            'Não foi possível sortear um jogador. Tente novamente mais tarde.',
+          );
         }
       }
     }
 
-    if (!playerFound) {
-      throw 'Limite de tentativas excedido na API (sem dados de estatística)';
-    }
+    throw const PlayerNotFoundException(
+      'Limite de tentativas excedido (sem dados de estatística)',
+    );
   }
 }

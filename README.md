@@ -28,6 +28,36 @@ Para otimizar o consumo da API externa e garantir a escalabilidade do jogo, a ap
 
 ---
 
+## 📂 Estrutura do Projeto
+
+```
+lib/
+├── core/                     # Camada base reutilizável
+│   ├── api/                  # Constantes e serviço de API
+│   ├── exceptions/           # Exceções customizadas do app
+│   ├── firebase/             # Serviço do Firestore
+│   ├── logger/               # Logger centralizado
+│   └── theme/                # Sistema de design
+│       ├── app_colors.dart   # Paleta de cores centralizada
+│       └── app_theme.dart    # Tema global (fontes e estilos)
+├── features/
+│   └── home/
+│       ├── components/       # Widgets da Home
+│       │   ├── home_header.dart      # Cabeçalho com logo e avatar
+│       │   ├── daily_games_grid.dart # Grade de 6 mini jogos diários
+│       │   └── streak_card.dart      # Card de streaks com ícones
+│       └── pages/
+│           └── home_page.dart        # Página principal
+├── models/
+│   ├── mini_game_model.dart  # Modelo dos mini jogos
+│   └── player_model.dart     # Modelo de jogador
+├── game_manager.dart         # Lógica de sorteio de jogadores
+└── main.dart                 # Entry point do app
+```
+
+
+---
+
 ## 🚀 Tecnologias Utilizadas
 
 * **[Flutter](https://flutter.dev/):** Framework principal para desenvolvimento da interface mobile/web.
@@ -35,6 +65,7 @@ Para otimizar o consumo da API externa e garantir a escalabilidade do jogo, a ap
 * **[Firebase Authentication](https://firebase.google.com/):** Gerenciamento de login e criação de usuários.
 * **[Cloud Firestore (Firebase)](https://firebase.google.com/):** Banco de dados NoSQL para armazenar o jogador do dia e as estatísticas dos usuários.
 * **[API-Football (via RapidAPI)](https://www.api-football.com/):** API externa utilizada para obter os dados reais dos jogadores de futebol.
+* **[Google Fonts](https://pub.dev/packages/google_fonts):** Fontes Outfit e JetBrains Mono.
 
 ---
 

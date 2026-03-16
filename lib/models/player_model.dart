@@ -20,7 +20,6 @@ class PlayerModel {
     final statsList = json['statistics'] as List?;
     PlayerStatistics? stats;
     
-    // Pegar apenas a primeira estatística se a lista não for vazia
     if (statsList != null && statsList.isNotEmpty) {
       stats = PlayerStatistics.fromJson(statsList[0]);
     }
@@ -33,6 +32,18 @@ class PlayerModel {
       photo: player['photo'],
       statistics: stats,
     );
+  }
+
+  /// Serializa o modelo para um Map — útil para salvar no Firestore ou cache local.
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'age': age,
+      'nationality': nationality,
+      'photo': photo,
+      'statistics': statistics?.toJson(),
+    };
   }
 }
 
@@ -53,5 +64,13 @@ class PlayerStatistics {
       leagueName: json['league']?['name'],
       position: json['games']?['position'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'teamName': teamName,
+      'leagueName': leagueName,
+      'position': position,
+    };
   }
 }
