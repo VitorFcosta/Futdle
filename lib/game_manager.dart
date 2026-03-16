@@ -4,10 +4,14 @@ import 'api_service.dart';
 import 'models/player_model.dart'; 
 
 class GameManager {
-  final ApiService _api = ApiService();
-  final FirebaseFirestore _bd = FirebaseFirestore.instance;
+  final ApiService _apiService;
+  final FirebaseFirestore _db;
 
-  Future<void> randonplayer() async {
+  GameManager({ApiService? apiService, FirebaseFirestore? db})
+      : _apiService = apiService ?? ApiService(),
+        _db = db ?? FirebaseFirestore.instance;
+
+  Future<void> randomPlayer() async {
     List<int> topLeagues = [39, 140, 135, 78, 61];
     final random = Random();
 
@@ -18,48 +22,51 @@ class GameManager {
     while (!playerFound && attempts < maxAttempts) {
       attempts++;
       int leagueId = topLeagues[random.nextInt(topLeagues.length)];
-      int pagedraw = random.nextInt(3) + 1;
+      int randomPage = random.nextInt(3) + 1;
       
-      print('sorteio definido. -> Liga: $leagueId, Pagina: $pagedraw (Tentativa $attempts)');
+      print('sorteio definido. -> Liga: $leagueId, Pagina: $randomPage (Tentativa $attempts)');
 
       try {
-        List<PlayerModel> updateDailyPlayer = await _api.updateDailyPlayer(leagueId, pagedraw);
+        List<PlayerModel> players = await _apiService.updateDailyPlayer(leagueId, randomPage);
         
-        if (updateDailyPlayer.isNotEmpty) {
-          int indexrandon = random.nextInt(updateDailyPlayer.length);
-          final player = updateDailyPlayer[indexrandon];
-
-
-          if (player.statistics != null) {
-            final stats = player.statistics!;
-
-            await _bd.collection('daily_player').doc('today').set({
-                'name': player.name,
-                'age': player.age,
-                'nationality': player.nationality,
-                'team': stats.teamName,
-                'league': stats.leagueName,
-                'position': stats.position,
-                'photo': player.photo,
-                'updatedAt': FieldValue.serverTimestamp(),
-              }
-            );
-            print('jogador sorteado com sucesso "${player.name}"');
-            playerFound = true; 
-          } else {
-            print('Jogador ${player.name} veio sem statistics. Sorteando novamente...');
-          }
+        if (players.isEmpty) {
+          continue;
         }
+
+        int randomIndex = random.nextInt(players.length);
+        final player = players[randomIndex];
+
+        if (player.statistics == null) {
+          print('Jogador ${player.name} veio sem statistics. Sorteando novamente...');
+          continue;
+        }
+
+        final stats = player.statistics!;
+
+        await _db.collection('daily_player').doc('today').set({
+            'name': player.name,
+            'age': player.age,
+            'nationality': player.nationality,
+            'team': stats.teamName,
+            'league': stats.leagueName,
+            'position': stats.position,
+            'photo': player.photo,
+            'updatedAt': FieldValue.serverTimestamp(),
+          }
+        );
+        print('jogador sorteado com sucesso "${player.name}"');
+        playerFound = true; 
+
       } catch (e) {
         print('Erro na tentativa $attempts: $e');
         if (attempts >= maxAttempts) {
-           throw Exception('Não foi possível sortear um jogador. Tente novamente mais tarde.');
+           throw 'Não foi possível sortear um jogador. Tente novamente mais tarde.';
         }
       }
     }
 
     if (!playerFound) {
-      throw Exception('Limite de tentativas excedido na API (sem dados de estatística)');
+      throw 'Limite de tentativas excedido na API (sem dados de estatística)';
     }
   }
 }

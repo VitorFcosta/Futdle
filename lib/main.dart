@@ -1,39 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:futdle/game_manager.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // Pacote que esconde nossa chave
-import 'firebase_options.dart'; // Arquivo gerado pelo FlutterFire
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'firebase_options.dart';
+import 'pages/home_page.dart';
 
 void main() async {
-  // Garante que o Flutter está pronto antes de chamar pacotes assíncronos
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Carrega o arquivo .env pra memória logo quando o app abre
   await dotenv.load(fileName: ".env");
 
-  // Inicializa o Firebase conectando com o seu projeto na nuvem
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   
-  runApp(const MeuAppDeTeste());
+  runApp(const MainAppTest());
 }
 
-// Widget principal que inicia o MaterialApp
-class MeuAppDeTeste extends StatelessWidget {
-  const MeuAppDeTeste({super.key});
+class MainAppTest extends StatelessWidget {
+  const MainAppTest({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const FutdleHomePage(),
+      theme: ThemeData(
+        textTheme: GoogleFonts.jetBrainsMonoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
+      home: const HomePage(),
     );
   }
 }
 
-// Tela principal que contém o Scaffold (Necessário para o ScaffoldMessenger)
 class FutdleHomePage extends StatefulWidget {
   const FutdleHomePage({super.key});
 
@@ -42,20 +43,18 @@ class FutdleHomePage extends StatefulWidget {
 }
 
 class _FutdleHomePageState extends State<FutdleHomePage> {
-  // Variável que diz para a tela se o botão está carregando ou não
   bool _isLoading = false;
+  final GameManager _gameManager = GameManager();
 
-  void _sortearJogador() async {
+  void _drawPlayer() async {
     setState(() {
-      _isLoading = true; // Ativar a "bolinha girando"
+      _isLoading = true;
     });
 
     try {
        print('Buscando dados na API...');
-       final manager = GameManager();
-       await manager.randonplayer();
+       await _gameManager.randomPlayer();
 
-       // Se chegou aqui e não caiu no catch, é porque deu tudo certo!
        if (mounted) {
          ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(
@@ -65,11 +64,10 @@ class _FutdleHomePageState extends State<FutdleHomePage> {
          );
        }
     } catch (e) {
-       // Se o GameManager der um throw Exception(), nós capturamos aqui
        if (mounted) {
          ScaffoldMessenger.of(context).showSnackBar(
            SnackBar(
-             content: Text(e.toString().replaceAll('Exception: ', '')), // Limpa a string pro usuario
+             content: Text(e.toString()), 
              backgroundColor: Colors.red,
            ),
          );
@@ -77,7 +75,7 @@ class _FutdleHomePageState extends State<FutdleHomePage> {
     } finally {
       if (mounted) {
         setState(() {
-          _isLoading = false; // Desativar a bolinha e voltar pro botão
+          _isLoading = false;
         });
       }
     }
@@ -92,13 +90,13 @@ class _FutdleHomePageState extends State<FutdleHomePage> {
       ),
       body: Center(
         child: _isLoading 
-          ? const CircularProgressIndicator(color: Colors.green,) // Bolinha de carregamento
+          ? const CircularProgressIndicator(color: Colors.green,)
           : ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
                 backgroundColor: Colors.black,
               ),
-              onPressed: _sortearJogador, // Chama nossa nova função
+              onPressed: _drawPlayer,
               child: const Text(
                 'Puxar Jogador e Salvar no Firebase',
                 style: TextStyle(fontSize: 18, color: Colors.white),
