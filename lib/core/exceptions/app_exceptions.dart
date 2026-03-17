@@ -28,3 +28,13 @@ class FirestoreException implements Exception {
   @override
   String toString() => 'FirestoreException: $message';
 }
+
+/// Exceção lançada quando a autenticação falha (login, registro, etc.)
+class AuthException implements Exception {
+  final String message;
+
+  const AuthException(this.message);
+
+  @override
+  String toString() => 'AuthException: $message';
+}

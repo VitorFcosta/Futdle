@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
-import 'features/home/pages/home_page.dart';
+import 'features/auth/auth_gate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +18,8 @@ void main() async {
 }
 
 /// Widget raiz do Futdle.
+/// Agora usa [AuthGate] como home, que decide automaticamente
+/// se mostra a LoginPage ou a HomePage baseado no estado de login.
 class FutdleApp extends StatelessWidget {
   const FutdleApp({super.key});
 
@@ -26,7 +28,7 @@ class FutdleApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomePage(),
+      home: const AuthGate(),
     );
   }
 }
