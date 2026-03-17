@@ -7,6 +7,10 @@ import '../exceptions/app_exceptions.dart';
 class FirestoreService {
   final FirebaseFirestore _db;
 
+  /// Cache local da lista de jogadores para evitar leituras repetidas.
+  /// Carregada uma vez e reutilizada durante toda a sessão.
+  List<Map<String, dynamic>>? _playersCache;
+
   FirestoreService({FirebaseFirestore? db})
       : _db = db ?? FirebaseFirestore.instance;
 
@@ -39,5 +43,38 @@ class FirestoreService {
     } catch (e) {
       throw FirestoreException('Erro ao buscar jogador do dia: $e');
     }
+  }
+
+  /// Carrega TODOS os jogadores da coleção `player_list` em memória.
+  ///
+  /// Usa cache local: a primeira chamada busca do Firestore,
+  /// chamadas subsequentes retornam o cache.
+  /// Com ~200 jogadores (~50KB), isso é eficiente e evita
+  /// queries repetidas ao Firestore (economiza leituras).
+  Future<List<Map<String, dynamic>>> getAllPlayers() async {
+    if (_playersCache != null) return _playersCache!;
+
+    try {
+      final snapshot = await _db.collection('player_list').get();
+      _playersCache = snapshot.docs.map((doc) => doc.data()).toList();
+      return _playersCache!;
+    } catch (e) {
+      throw FirestoreException('Erro ao buscar lista de jogadores: $e');
+    }
+  }
+
+  /// Busca jogadores cujo nome contém a [query].
+  ///
+  /// A busca é feita localmente em memória (filtrando o cache)
+  /// para ser instantânea e não gastar leituras do Firestore.
+  /// Usa o campo `nameLower` para busca case-insensitive.
+  Future<List<Map<String, dynamic>>> searchPlayers(String query) async {
+    final allPlayers = await getAllPlayers();
+    final queryLower = query.toLowerCase();
+
+    return allPlayers
+        .where((p) => (p['nameLower'] ?? p['name'].toString().toLowerCase())
+            .contains(queryLower))
+        .toList();
   }
 }

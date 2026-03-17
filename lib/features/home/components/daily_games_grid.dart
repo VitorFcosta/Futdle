@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:futdle/models/mini_game_model.dart';
 import 'package:futdle/core/theme/app_colors.dart';
+import 'package:futdle/features/wordle/pages/wordle_page.dart';
 
 class DailyGamesGrid extends StatelessWidget {
   final List<MiniGameModel> games;
@@ -43,6 +44,18 @@ class _GameCircle extends StatelessWidget {
 
   const _GameCircle({required this.game});
 
+  /// Navega para a tela do jogo correspondente.
+  /// Por enquanto, apenas o Wordle tem tela implementada.
+  void _navigateToGame(BuildContext context) {
+    if (game.id == 'wordle') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const WordlePage()),
+      );
+    }
+    // Os outros jogos serão implementados futuramente
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLocked = !game.isAvailable;
@@ -64,7 +77,7 @@ class _GameCircle extends StatelessWidget {
           shape: const CircleBorder(),
           clipBehavior: Clip.hardEdge,
           child: InkWell(
-            onTap: isLocked ? null : () {},
+            onTap: isLocked ? null : () => _navigateToGame(context),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -96,3 +109,4 @@ class _GameCircle extends StatelessWidget {
     );
   }
 }
+

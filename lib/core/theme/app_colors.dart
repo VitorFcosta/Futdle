@@ -24,4 +24,7 @@ class AppColors {
 
   /// Cinza para textos secundários e placeholders.
   static const Color grey = Color(0xFF95A5A6);
+
+  /// Amarelo para feedbacks parciais (ex: atributo parecido no Wordle).
+  static const Color warning = Color(0xFFF39C12);
 }
