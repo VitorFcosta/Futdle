@@ -52,9 +52,9 @@ class HomePage extends StatelessWidget {
                   if (stats == null) {
                     return const StreakCard(); // Status vazio/default
                   }
-                  
+
                   return StreakCard(
-                    bestStreak: stats.maxStreak, 
+                    bestStreak: stats.maxStreak,
                     bestStreakGame: stats.maxStreak > 0 ? 'Wordle' : '--',
                     topWinsCount: stats.gamesWon,
                     topWinsGame: stats.gamesWon > 0 ? 'Wordle' : '--',

@@ -49,7 +49,7 @@ class _WordlePageState extends State<WordlePage> {
   Future<void> _loadGame() async {
     try {
       final user = _authService.currentUser;
-      
+
       // Carrega status apenas se for partida do dia (valendo streak)
       if (widget.isDailyStreak && user != null) {
         _userStats = await _firestoreService.getUserStats(user.uid);
@@ -77,7 +77,8 @@ class _WordlePageState extends State<WordlePage> {
       if (widget.isDailyStreak && _userStats != null && _dateId != null) {
         final last = _userStats!.lastPlayedDate;
         if (last != null) {
-          final lastDateStr = '${last.year}-${last.month.toString().padLeft(2, '0')}-${last.day.toString().padLeft(2, '0')}';
+          final lastDateStr =
+              '${last.year}-${last.month.toString().padLeft(2, '0')}-${last.day.toString().padLeft(2, '0')}';
           if (lastDateStr == _dateId) {
             _alreadyPlayedToday = true;
           }
@@ -94,12 +95,11 @@ class _WordlePageState extends State<WordlePage> {
       // Se já concluiu o desafio hoje, trava o jogo e mostra a modal.
       if (_alreadyPlayedToday) {
         // Bloqueia interações do campo de busca mudando estados
-        _hasWon = true; 
+        _hasWon = true;
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _showResultsModal();
         });
       }
-
     } catch (e) {
       setState(() {
         _errorMessage = 'Erro ao carregar o jogo: $e';
@@ -109,7 +109,9 @@ class _WordlePageState extends State<WordlePage> {
   }
 
   void _onPlayerGuessed(Map<String, dynamic> guessPlayer) {
-    if (_targetPlayer == null || _hasWon || _hasLost || _alreadyPlayedToday) return;
+    if (_targetPlayer == null || _hasWon || _hasLost || _alreadyPlayedToday) {
+      return;
+    }
 
     final comparison = WordleGameLogic.compare(guessPlayer, _targetPlayer!);
 
@@ -138,10 +140,11 @@ class _WordlePageState extends State<WordlePage> {
     if (user == null || _userStats == null) return;
 
     final stats = _userStats!;
-    
+
     // Atualiza base dos Status Diários
-    final yesterdayStr = "${DateTime.now().subtract(const Duration(days: 1)).year}-${DateTime.now().subtract(const Duration(days: 1)).month.toString().padLeft(2, '0')}-${DateTime.now().subtract(const Duration(days: 1)).day.toString().padLeft(2, '0')}";
-    final lastPlayedStr = stats.lastPlayedDate != null 
+    final yesterdayStr =
+        "${DateTime.now().subtract(const Duration(days: 1)).year}-${DateTime.now().subtract(const Duration(days: 1)).month.toString().padLeft(2, '0')}-${DateTime.now().subtract(const Duration(days: 1)).day.toString().padLeft(2, '0')}";
+    final lastPlayedStr = stats.lastPlayedDate != null
         ? "${stats.lastPlayedDate!.year}-${stats.lastPlayedDate!.month.toString().padLeft(2, '0')}-${stats.lastPlayedDate!.day.toString().padLeft(2, '0')}"
         : null;
 
@@ -162,7 +165,8 @@ class _WordlePageState extends State<WordlePage> {
       }
 
       final tries = _guesses.length;
-      stats.guessDistribution[tries] = (stats.guessDistribution[tries] ?? 0) + 1;
+      stats.guessDistribution[tries] =
+          (stats.guessDistribution[tries] ?? 0) + 1;
     } else {
       stats.currentStreak = 0;
     }
@@ -281,10 +285,14 @@ class _WordlePageState extends State<WordlePage> {
                     vertical: 8,
                   ),
                   itemCount:
-                      _guesses.length + (_hasWon && !_alreadyPlayedToday ? 1 : 0) + (_hasLost && !_alreadyPlayedToday ? 1 : 0),
+                      _guesses.length +
+                      (_hasWon && !_alreadyPlayedToday ? 1 : 0) +
+                      (_hasLost && !_alreadyPlayedToday ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == _guesses.length) {
-                      return _hasWon && !_alreadyPlayedToday ? _buildWinMessage() : _buildLoseMessage();
+                      return _hasWon && !_alreadyPlayedToday
+                          ? _buildWinMessage()
+                          : _buildLoseMessage();
                     }
                     return PlayerGuessRow(comparison: _guesses[index]);
                   },
@@ -311,10 +319,19 @@ class _WordlePageState extends State<WordlePage> {
                     onPressed: _showResultsModal,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       backgroundColor: AppColors.primary,
                     ),
-                    child: const Text('🌟 Ver Meus Resultados', style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                    child: const Text(
+                      '🌟 Ver Meus Resultados',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 )
               : PlayerSearchField(

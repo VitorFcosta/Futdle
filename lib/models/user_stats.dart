@@ -24,9 +24,11 @@ class UserStats {
       lastPlayedDate: json['lastPlayedDate'] != null
           ? DateTime.parse(json['lastPlayedDate'])
           : null,
-      guessDistribution: (json['guessDistribution'] as Map<String, dynamic>?)?.map(
+      guessDistribution:
+          (json['guessDistribution'] as Map<String, dynamic>?)?.map(
             (key, value) => MapEntry(int.parse(key), value as int),
-          ) ?? {},
+          ) ??
+          {},
     );
   }
 

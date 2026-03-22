@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
+
 void main() {
   final file = File('assets/players_data.json');
   final data = jsonDecode(file.readAsStringSync()) as List;

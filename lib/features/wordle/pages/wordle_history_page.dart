@@ -60,81 +60,87 @@ class _WordleHistoryPageState extends State<WordleHistoryPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      _errorMessage!,
-                      style: const TextStyle(color: AppColors.error),
-                      textAlign: TextAlign.center,
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: AppColors.error),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          : _history.isEmpty
+          ? const Center(child: Text('Nenhum jogo no histórico ainda.'))
+          : ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              itemCount: _history.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              itemBuilder: (context, index) {
+                final item = _history[index];
+                final dateStr =
+                    item['dateId'] as String? ?? 'Data Desconhecida';
+
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: AppColors.dark.withValues(alpha: 0.1),
+                      width: 1,
                     ),
                   ),
-                )
-              : _history.isEmpty
-                  ? const Center(
-                      child: Text('Nenhum jogo no histórico ainda.'),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      itemCount: _history.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
-                      itemBuilder: (context, index) {
-                        final item = _history[index];
-                        final dateStr = item['dateId'] as String? ?? 'Data Desconhecida';
-
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: AppColors.dark.withValues(alpha: 0.1),
-                              width: 1,
-                            ),
-                          ),
-                          elevation: 0,
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 16,
-                            ),
-                            leading: Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.calendar_month, color: AppColors.primary),
-                            ),
-                            title: Text(
-                              'Desafio de $dateStr',
-                              style: GoogleFonts.outfit(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.dark,
-                              ),
-                            ),
-                            subtitle: Text(
-                              'Jogue puramente por diversão!',
-                              style: GoogleFonts.jetBrainsMono(
-                                fontSize: 12,
-                                color: AppColors.grey,
-                              ),
-                            ),
-                            trailing: const Icon(Icons.play_circle_fill, color: AppColors.primary, size: 32),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => WordlePage(
-                                    targetPlayerToPlay: item,
-                                    isDailyStreak: false,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
+                  elevation: 0,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
                     ),
+                    leading: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.calendar_month,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    title: Text(
+                      'Desafio de $dateStr',
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.dark,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Jogue puramente por diversão!',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 12,
+                        color: AppColors.grey,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.play_circle_fill,
+                      color: AppColors.primary,
+                      size: 32,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => WordlePage(
+                            targetPlayerToPlay: item,
+                            isDailyStreak: false,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
     );
   }
 }

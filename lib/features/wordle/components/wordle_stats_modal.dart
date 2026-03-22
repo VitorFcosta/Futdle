@@ -21,7 +21,8 @@ class WordleStatsModal extends StatelessWidget {
     required this.dateId,
   });
 
-  static void show(BuildContext context, {
+  static void show(
+    BuildContext context, {
     required UserStats stats,
     required List<GuessComparison> guesses,
     required bool isDailyStreak,
@@ -63,20 +64,23 @@ class WordleStatsModal extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             if (isDailyStreak) ...[
               // Linha de Stats
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _statItem('JOGOS', stats.gamesPlayed.toString()),
-                  _statItem('VITÓRIAS', '${stats.gamesPlayed > 0 ? ((stats.gamesWon / stats.gamesPlayed) * 100).round() : 0}%'),
+                  _statItem(
+                    'VITÓRIAS',
+                    '${stats.gamesPlayed > 0 ? ((stats.gamesWon / stats.gamesPlayed) * 100).round() : 0}%',
+                  ),
                   _statItem('STREAK', stats.currentStreak.toString()),
                   _statItem('MÁXIMO', stats.maxStreak.toString()),
                 ],
               ),
               const SizedBox(height: 24),
-              
+
               // Distribuição de Acertos
               Text(
                 'Distribuição de Acertos',
@@ -92,15 +96,15 @@ class WordleStatsModal extends StatelessWidget {
               Text(
                 hasWon ? '🥳 Partida Arquivada Concluída!' : '😔 Fim de Jogo',
                 style: GoogleFonts.outfit(
-                  fontSize: 20, 
-                  fontWeight: FontWeight.bold, 
-                  color: hasWon ? AppColors.success : AppColors.error
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: hasWon ? AppColors.success : AppColors.error,
                 ),
               ),
             ],
-            
+
             const SizedBox(height: 32),
-            
+
             // Botões de Ação
             Row(
               children: [
@@ -110,15 +114,25 @@ class WordleStatsModal extends StatelessWidget {
                       Navigator.pop(context); // fecha modal
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (_) => const WordleHistoryPage()),
+                        MaterialPageRoute(
+                          builder: (_) => const WordleHistoryPage(),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.history, color: Colors.white),
-                    label: const Text('VER HISTÓRICO', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    label: const Text(
+                      'VER HISTÓRICO',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
@@ -130,8 +144,11 @@ class WordleStatsModal extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pop(context); // Volta à Home
               },
-              child: const Text('Voltar ao Início', style: TextStyle(color: AppColors.dark)),
-            )
+              child: const Text(
+                'Voltar ao Início',
+                style: TextStyle(color: AppColors.dark),
+              ),
+            ),
           ],
         ),
       ),
@@ -151,10 +168,7 @@ class WordleStatsModal extends StatelessWidget {
         ),
         Text(
           label,
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 10,
-            color: AppColors.grey,
-          ),
+          style: GoogleFonts.jetBrainsMono(fontSize: 10, color: AppColors.grey),
         ),
       ],
     );
@@ -171,28 +185,45 @@ class WordleStatsModal extends StatelessWidget {
         final guessLength = index + 1;
         final count = stats.guessDistribution[guessLength] ?? 0;
         final flex = (count / maxBarValue * 100).round();
-        
+
         final isCurrentGame = hasWon && currentGuesses.length == guessLength;
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 2),
           child: Row(
             children: [
-              Text('$guessLength', style: GoogleFonts.jetBrainsMono(fontWeight: FontWeight.bold, color: AppColors.dark, fontSize: 12)),
+              Text(
+                '$guessLength',
+                style: GoogleFonts.jetBrainsMono(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.dark,
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final width = constraints.maxWidth * (flex > 5 ? flex / 100 : 0.05);
+                    final width =
+                        constraints.maxWidth * (flex > 5 ? flex / 100 : 0.05);
                     return Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
                         width: width,
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        color: isCurrentGame ? AppColors.success : AppColors.grey.withValues(alpha: 0.5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
+                        color: isCurrentGame
+                            ? AppColors.success
+                            : AppColors.grey.withValues(alpha: 0.5),
                         child: Text(
                           '$count',
-                          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                           textAlign: TextAlign.right,
                         ),
                       ),
@@ -206,5 +237,4 @@ class WordleStatsModal extends StatelessWidget {
       }),
     );
   }
-
 }

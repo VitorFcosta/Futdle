@@ -40,7 +40,8 @@ class FirestoreService {
   Future<void> saveDailyPlayerFromMap(Map<String, dynamic> playerData) async {
     try {
       final now = DateTime.now();
-      final dateId = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      final dateId =
+          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
       // Salva no doc 'today' (acesso rápido à partida atual)
       await _db.collection('daily_player').doc('today').set({
@@ -126,7 +127,10 @@ class FirestoreService {
   /// Salva ou atualiza os status do usuário.
   Future<void> updateUserStats(String uid, UserStats stats) async {
     try {
-      await _db.collection('user_stats').doc(uid).set(stats.toJson(), SetOptions(merge: true));
+      await _db
+          .collection('user_stats')
+          .doc(uid)
+          .set(stats.toJson(), SetOptions(merge: true));
     } catch (e) {
       throw FirestoreException('Erro ao salvar stats do usuário: $e');
     }
@@ -135,7 +139,8 @@ class FirestoreService {
   /// Busca histórico de dias recentes, limitado a 30 dias passados.
   Future<List<Map<String, dynamic>>> getDailyHistory() async {
     try {
-      final snapshot = await _db.collection('daily_history')
+      final snapshot = await _db
+          .collection('daily_history')
           .orderBy('dateId', descending: true)
           .limit(30)
           .get();

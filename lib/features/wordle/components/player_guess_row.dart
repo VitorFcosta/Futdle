@@ -163,10 +163,7 @@ class _CountryBox extends StatelessWidget {
   final String nationality;
   final GuessResult result;
 
-  const _CountryBox({
-    required this.nationality,
-    required this.result,
-  });
+  const _CountryBox({required this.nationality, required this.result});
 
   @override
   Widget build(BuildContext context) {
@@ -245,7 +242,11 @@ class _AgeBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.calendar_today, size: 16, color: AppColors.white.withValues(alpha: 0.9)),
+            Icon(
+              Icons.calendar_today,
+              size: 16,
+              color: AppColors.white.withValues(alpha: 0.9),
+            ),
             const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -259,9 +260,17 @@ class _AgeBox extends StatelessWidget {
                   ),
                 ),
                 if (direction == AgeDirection.higher)
-                  const Icon(Icons.arrow_upward, size: 14, color: AppColors.white),
+                  const Icon(
+                    Icons.arrow_upward,
+                    size: 14,
+                    color: AppColors.white,
+                  ),
                 if (direction == AgeDirection.lower)
-                  const Icon(Icons.arrow_downward, size: 14, color: AppColors.white),
+                  const Icon(
+                    Icons.arrow_downward,
+                    size: 14,
+                    color: AppColors.white,
+                  ),
               ],
             ),
           ],
