@@ -4,7 +4,7 @@ Um jogo de adivinhação diária de jogadores de futebol inspirado no Wordle. O 
 
 ## 👨‍💻 Autor
 **Vitor Hugo Fernandes Costa** - Estudante de Engenharia de Software  
-GitHub: [@VitorFcosta](https://github.com/VitorFcosta) | [LinkedIn](URL_DO_SEU_LINKEDIN_AQUI)
+GitHub: [@VitorFcosta](https://github.com/VitorFcosta) | [LinkedIn](https://www.linkedin.com/in/vitor-hugo-fernandes-costa-122419300/)
 
 ---
 
@@ -103,7 +103,13 @@ flutter pub get
 Bash
 flutter run
 📱 Prints da Aplicação
-https://github.com/VitorFcosta/futdle/blob/main/Imagens/flutter_01.png
-https://github.com/VitorFcosta/futdle/blob/main/Imagens/Pagina_jogo.png
-https://github.com/VitorFcosta/futdle/blob/main/Imagens/popup.png
-https://github.com/VitorFcosta/futdle/blob/main/Imagens/Historico.png
+
+<p align="center">
+  <img src="Imagens/flutter_01.png" width="200" alt="Tela Inicial">
+  &nbsp;&nbsp;&nbsp;
+  <img src="Imagens/Pagina_jogo.png" width="200" alt="Gameplay">
+  &nbsp;&nbsp;&nbsp;
+  <img src="Imagens/popup.png" width="200" alt="Popup de Resultado">
+  &nbsp;&nbsp;&nbsp;
+  <img src="Imagens/Historico.png" width="200" alt="Histórico de Jogos">
+</p>
