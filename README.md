@@ -1,10 +1,10 @@
-⚽ FutDle - O "Wordle" do Futebol
+# ⚽ FutDle - O "Wordle" do Futebol
 
 Um jogo de adivinhação diária de jogadores de futebol inspirado no Wordle. O jogador precisa descobrir qual é o "Jogador Misterioso do Dia" baseado em dicas de atributos (Nacionalidade, Liga, Time, Posição e Idade).
 
 ## 👨‍💻 Autor
-**Vitor Hugo Fernandes Costa** Estudante de Engenharia de Software  
-GitHub: [@VitorFcosta](https://github.com/VitorFcosta) | [LinkedIn](URL_DO_SEU_LINKEDIN_AQUI)
+**Vitor Hugo Fernandes Costa** - Estudante de Engenharia de Software  
+GitHub: [@VitorFcosta](https://github.com/VitorFcosta) | [LinkedIn](https://www.linkedin.com/in/vitor-hugo-fernandes-costa-122419300/)
 
 ---
 
@@ -24,88 +24,82 @@ Este projeto foi desenvolvido como requisito de avaliação da disciplina, cumpr
 ## 🏗️ Arquitetura da Aplicação
 
 Para otimizar o consumo da API externa e garantir a escalabilidade do jogo, a aplicação foi arquitetada para que o App Flutter se comunique apenas com o Firebase. O Firebase, por sua vez, é alimentado diariamente com os dados da API de esportes.
+
 ![Desenho da Arquitetura do FutDle](https://github.com/VitorFcosta/futdle/blob/main/FootEDL.drawio.png)
 
 ---
 
 ## 📂 Estrutura do Projeto
 
-```
+O projeto segue uma arquitetura baseada em *Features* para garantir escalabilidade e separação de responsabilidades:
+
+```text
 lib/
-├── core/                     # Camada base reutilizável
-│   ├── api/                  # Constantes e serviço de API
-│   ├── exceptions/           # Exceções customizadas do app
-│   ├── firebase/             # Serviço do Firestore
-│   ├── logger/               # Logger centralizado
-│   └── theme/                # Sistema de design
-│       ├── app_colors.dart   # Paleta de cores centralizada
-│       └── app_theme.dart    # Tema global (fontes e estilos)
-├── features/
-│   └── home/
-│       ├── components/       # Widgets da Home
-│       │   ├── home_header.dart      # Cabeçalho com logo e avatar
-│       │   ├── daily_games_grid.dart # Grade de 6 mini jogos diários
-│       │   └── streak_card.dart      # Card de streaks com ícones
-│       └── pages/
-│           └── home_page.dart        # Página principal
-├── models/
-│   ├── mini_game_model.dart  # Modelo dos mini jogos
-│   └── player_model.dart     # Modelo de jogador
-├── game_manager.dart         # Lógica de sorteio de jogadores
-└── main.dart                 # Entry point do app
+├── core/                     # Núcleo da aplicação 
+│   ├── api/                  # Serviços e constantes da API externa
+│   ├── di/                   # Configuração de injeção de dependências
+│   ├── exceptions/           # Tratamento de erros customizados
+│   ├── firebase/             # Serviços do Firebase (Firestore, Auth, Importação)
+│   ├── logger/               # Sistema centralizado de logs
+│   ├── managers/             # Gerenciadores lógicos 
+│   ├── models/               # Modelos de dados globais
+│   ├── theme/                # Sistema de design 
+│   └── utils/                # Funções utilitárias e mappers
+├── features/                 # Módulos funcionais do app
+│   ├── admin/                # Tela e controle do painel de administração
+│   ├── auth/                 # Fluxo de login, registro e controle de acesso 
+│   ├── home/                 # Tela inicial e seleção de jogos
+│   └── wordle/               # Lógica, interface e estatísticas do jogo principal
+├── firebase_options.dart     # Configurações geradas pelo FlutterFire
+└── main.dart                 # Ponto de entrada e inicialização do app
 ```
+🚀 Tecnologias e Pacotes Utilizados
+Flutter & Dart: Framework e linguagem base.
 
+Firebase Auth & Cloud Firestore: Gerenciamento de usuários, banco de dados NoSQL e controle de acesso integrado ao AuthGate.
 
----
+API-Football (via RapidAPI): Fonte dos dados reais dos jogadores.
 
-## 🚀 Tecnologias Utilizadas
+GetIt: Padrão de Injeção de Dependências (DI) para desacoplar os serviços.
 
-* **[Flutter](https://flutter.dev/):** Framework principal para desenvolvimento da interface mobile/web.
-* **[Dart](https://dart.dev/):** Linguagem de programação base.
-* **[Firebase Authentication](https://firebase.google.com/):** Gerenciamento de login e criação de usuários.
-* **[Cloud Firestore (Firebase)](https://firebase.google.com/):** Banco de dados NoSQL para armazenar o jogador do dia e as estatísticas dos usuários.
-* **[API-Football (via RapidAPI)](https://www.api-football.com/):** API externa utilizada para obter os dados reais dos jogadores de futebol.
-* **[Google Fonts](https://pub.dev/packages/google_fonts):** Fontes Outfit e JetBrains Mono.
+Flutter DotEnv: Gerenciamento seguro de chaves de API via variáveis de ambiente.
 
----
+Cached Network Image: Otimização e cache no carregamento de imagens.
 
-## ⚙️ Como Instalar e Rodar o Projeto
+Country Flags: Exibição de bandeiras com base na nacionalidade dos jogadores.
 
-Siga os passos abaixo para clonar e testar a aplicação na sua máquina:
+Google Fonts: Fontes Outfit e JetBrains Mono.
 
-**1. Pré-requisitos:**
-* Ter o [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado.
-* Ter um emulador configurado (Android/iOS) ou um dispositivo físico conectado.
+⚙️ Como Instalar e Rodar o Projeto
+Siga os passos abaixo para testar a aplicação na sua máquina:
 
-**2. Clonando o repositório:**
-```bash
-git clone https://github.com/VitorFcosta/futdle.git
+1. Pré-requisitos:
+
+Ter o Flutter SDK instalado (SDK ^3.11.1).
+
+Ter um emulador configurado ou dispositivo conectado.
+
+2. Clonando o repositório:
+```
+Bash
+git clone [https://github.com/VitorFcosta/futdle.git](https://github.com/VitorFcosta/futdle.git)
 cd futdle
 ```
+3. Configure as variáveis de ambiente (.env):
 
-**3. Crie a chave da API**
-- Este projeto consome dados da [API-Sports (Football)](https://www.api-football.com/).
-- Crie uma conta lá para pegar sua `API_KEY`.
+Na raiz do projeto, você verá um arquivo chamado .env.example.
 
-**4. Configure as variáveis de ambiente**
-- Na raiz do projeto, você verá um arquivo chamado `.env.example`.
-- Crie um arquivo novo chamado `.env` no mesmo local.
-- Copie o conteúdo do `.env.example` para dentro do seu novo `.env` e substitua `sua_chave_da_api_sports_aqui` pela chave real que você pegou no site.
+Crie um arquivo novo chamado .env no mesmo local.
 
-**5. Instalando dependências e Rodando:**
-```bash
+Copie o conteúdo de .env.example para dentro do .env e substitua a chave pela sua chave real da API-Sports.
+
+4. Instalando dependências:
+```
 flutter pub get
+```
+5. Rodando o aplicativo:
+```
 flutter run
 ```
-
----
-
-## 📱 Prints da Aplicação
-- Telas prototipo
-- Tela de Login
-- Tela Inicial
-- Tela de Jogo (Gameplay)
-
-## 📥 Download e Teste
-- Baixar APK (Android): Clique aqui para baixar a versão mais recente
-- Testar Versão Web: Acessar FutDle Web
+📱 Prints da Aplicação
+(Adicione aqui suas imagens: Telas protótipo, Login, Inicial, Gameplay)
