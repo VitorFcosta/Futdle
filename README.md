@@ -20,6 +20,10 @@
 
 <p align="center">
   <img src="Imagens/flutter_01.png" width="280" alt="Tela inicial do FutDLE"/>
+  <img src="Imagens/Historico.png" width="280" alt="Historico"/>
+  <img src="Imagens/Pagina_jogo.png" width="280" alt="pagina do jogo"/>
+  <img src="Imagens/popup.png" width="280" alt="Historico em Pop-up"/>
+  
 </p>
 
 ---
@@ -237,23 +241,8 @@ O app segue uma paleta visual coesa e amigável:
 
 ---
 
-## 🤝 Contribuindo
-
-1. Faça um **fork** do projeto
-2. Crie uma **branch** para sua feature (`git checkout -b feature/minha-feature`)
-3. **Commit** suas alterações (`git commit -m 'feat: adiciona minha feature'`)
-4. **Push** para a branch (`git push origin feature/minha-feature`)
-5. Abra um **Pull Request**
-
----
-
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
-
-<p align="center">
-  Feito com ⚽ e ☕ por <a href="https://github.com/VitorFcosta">Vitor Costa</a>
->>>>>>> a7a4b66 (docs: Adicione README.md com visão geral do projeto, arquitetura e instruções de configuração)
-</p>
