@@ -15,6 +15,8 @@
 </p>
 
 ---
+> 📱 **[Clique aqui para baixar o APK do jogo](sha256:cebfa0d29cf7e44c4c6cc03ed7553f2c1863a2a3052e95801c7106f95750a26e)**
+---
 
 ## 📸 Screenshots
 
